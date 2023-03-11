@@ -1,0 +1,13 @@
+.signout i {
+    padding: 0 5px;
+    color: red !important;
+}
+
+.header__right__auth a {
+    font-size: 14px !important;
+}
+
+.header__right__auth a:hover {
+    /* font-size: 14px !important; */
+    color: #ca1515;
+}
