@@ -1,0 +1,27 @@
+Create a small carting system
+Use any template 
+Registration and login form should be there (submission using ajax)   -> 6 hrs
+Home page  -> 10hrs
+Should have the latest product listing category wise (Shirt, T-Shirt, Jeans etc..)
+Also display the most visited product in the home page.
+If a user clicks on a product it should display in a popup with brief description, and view more button which redirect in product detail page
+Shop page  -> 8hrs
+display product listing with category 
+Add category dropdown
+Product Detail page -> 13hrs 
+Show product listing in proper manner. If product quantity = 0, Show Out of stock else show In stock with Add to Cart button.
+Buy now button to directly buy products.
+Add to cart button : On click of Add to cart button, Add items in cart and in Show Total Cart counter at top of the page. Counter should increase as I add products in the cart.
+On click of Total Cart , Redirect to cart listing and show cart listing products and show total amount of price of all products at bottom. -> 5hrs
+Checkout page : -> 5hrs
+Shipping address fields
+Payment method : COD
+After successful checkout redirect to thank you page
+Admin Dashboard  -> 13hrs
+Admin login
+Customer management (add, delete, update customer details)
+Product (add, delete, update products)
+Manage stocks of products
+
+6+10+8+13+5+5+13 = 60 
+60/8.5 = 7
