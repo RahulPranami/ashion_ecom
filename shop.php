@@ -1,13 +1,20 @@
 <!DOCTYPE html>
 <html lang="zxx">
 
+<?php
+include_once "./Config/config.php";
+include_once "./Config/cart.php";
+$ecomm = new ECOMM();
+$cart = new CART();
+?>
+
 <head>
     <meta charset="UTF-8">
     <meta name="description" content="Ashion Template">
     <meta name="keywords" content="Ashion, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Ashion | Template</title>
+    <title>Ashion | Shop</title>
 
     <?php include_once "./include_css.php"; ?>
 </head>
@@ -27,7 +34,10 @@
 
 
     <?php include_once "./include_js.php"; ?>
-    <script src="script.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"> </script>
+    <script src="./script.js"></script>
+
 </body>
 
 </html>

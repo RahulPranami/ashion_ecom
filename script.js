@@ -157,4 +157,24 @@ $(document).ready(() => {
     modal.find("#productname").text(name);
     modal.find("#productPrice").text(price);
   });
+
+  // addToCart = (id) => {
+  //   $.ajax({
+  //     url: "./Config/addToCart.php",
+  //     method: "POST",
+  //     data: { id: id },
+  //     success: function (res) {
+  //       // console.log(res);
+  //       if (res == 200) {
+  //         alert("Added to Cart");
+  //       }
+  //       if (res == 400) {
+  //         alert("Something Went Wrong");
+  //       }
+  //     },
+  //   });
+  // };
 });
+function addToCart(params) {
+  console.log(params);
+}

@@ -5,7 +5,7 @@
     <!-- <i class="fas fa-plus-square"></i> -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Products</h1>
-        <a href="./profile.php" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-plus-square text-white-50 mr-2"></i>Add a Product</a>
+        <a href="./addProduct.php" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-plus-square text-white-50 mr-2"></i>Add a Product</a>
     </div>
     <hr>
 
@@ -39,10 +39,10 @@
                                     <td><?= $row['id'] ?></td>
                                     <td><?= $row['name'] ?></td>
                                     <td><?= $row['cName'] ?></td>
-                                    <td> <img style="width: 50px; height: 50px;" src="<?php echo $row['image']; ?>" alt="Not Found"> </td>
+                                    <td> <img style="height: 75px;" src="<?= $row['image'] ?>" class="img-fluid img-thumbnail" alt="Not Found"> </td>
                                     <td><?= $row['description'] ?></td>
                                     <td><?= $row['price'] ?></td>
-                                    <td><a href="?dashboard&editProd=<?= $row['id'] ?>"> <button class="btn btn-sm btn-outline-success">Edit</button> </a> </td>
+                                    <td><a href="./editProduct.php?id=<?= $row['id']; ?>"> <button class="btn btn-sm btn-outline-success">Edit</button> </a> </td>
                                     <td><button name="btnDel" class="btn btn-sm btn-outline-danger" onclick="deleteData('<?= $row['id'] ?>')">Delete</button></td>
                                 </tr>
                             <?php endwhile ?>

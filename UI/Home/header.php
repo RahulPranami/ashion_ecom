@@ -1,3 +1,9 @@
+<?php
+// include_once "./config.php";
+// include_once "../Config/cart.php";
+// $ecomm = new ECOMM();
+// $cart = new CART();
+?>
 <!-- Header Section Begin -->
 <header class="header">
     <div class="container-fluid">
@@ -43,8 +49,9 @@
                         <li><a href="#"><span class="icon_heart_alt"></span>
                                 <div class="tip">2</div>
                             </a></li>
-                        <li><a href="#"><span class="icon_bag_alt"></span>
-                                <div class="tip">2</div>
+                        <li><a href="./cart.php"><span class="icon_bag_alt"></span>
+                                <!-- <div class="tip">2</div> -->
+                                <div class="tip"><?= $cart->totalProduct() ?? 0 ?></div>
                             </a></li>
                     </ul>
                 </div>

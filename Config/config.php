@@ -10,7 +10,7 @@ class ECOMM
 
     function __construct()
     {
-        $this->conn =  @new mysqli("localhost", "root", "root", "php_ecommerce") or die("<p>Could not connect to the server!!!</p>" . "<p>Error Code " . mysqli_connect_errno() . " : " . mysqli_connect_error() . "</p>");
+        $this->conn =  @new mysqli("localhost", "ashion", "root", "php_ecommerce") or die("<p>Could not connect to the server!!!</p>" . "<p>Error Code " . mysqli_connect_errno() . " : " . mysqli_connect_error() . "</p>");
     }
 
     public function login($email, $passwd)
@@ -100,7 +100,7 @@ class ECOMM
 
     public function checklogin()
     {
-        if ($_SESSION["email"] == true) {
+        if ($_SESSION["email"]) {
             return true;
         } else {
             header('location: ../login.php');
@@ -176,7 +176,7 @@ class ECOMM
     public function getProducts()
     {
         // $start_from = ($pn - 1) * $limit;
-        $query = "SELECT p.id, p.name, c.name as cName, p.description, p.price FROM product as p JOIN category as c ON p.categoryId=c.id;";
+        $query = "SELECT p.id, p.name, c.name as cName, p.description, p.price, p.image FROM product as p JOIN category as c ON p.categoryId=c.id;";
 
         return $this->conn->query($query);
     }
@@ -209,26 +209,61 @@ class ECOMM
         }
     }
 
-
-    public function addProduct($name)
+    public function updateCategory($id, $name)
     {
-        $query = "SELECT * FROM category WHERE name='$name';";
-        $result = $this->conn->query($query);
-        $numRows = $result->num_rows;
+        $update = "UPDATE `category` SET `name`='$name' WHERE `id`=$id";
 
-        if ($numRows == 1) {
-            echo 303;
-            return false;
+        if ($this->conn->query($update)) {
+            echo 201;
+            return true;
         } else {
-            $insert = "INSERT INTO `category`(`name`) VALUES ('$name')";
-
-            if ($this->conn->query($insert)) {
-                echo 201;
-                return true;
-            } else {
-                echo 400;
-                return false;
-            }
+            echo 400;
+            return false;
         }
+    }
+
+    public function addProduct($name, $categoryId, $desc, $price, $imgName, $imgTName)
+    {
+        $file = "../assets/images/" . $imgName;
+        move_uploaded_file($imgTName, $file);
+
+        $query = "INSERT INTO `product` (`name`,`categoryId`,`description`,`price`,`image`) VALUES ('$name','$categoryId','$desc','$price','$file')";
+
+        if ($this->conn->query($query)) {
+            echo 201;
+            return true;
+        } else {
+            echo 400;
+            return false;
+        }
+    }
+
+    public function getProductDetails($id)
+    {
+        $query = "SELECT * FROM product WHERE `id`='$id';";
+        return $this->conn->query($query)->fetch_assoc();
+    }
+
+    public function isNew()
+    {
+        // $query = "SELECT * FROM `product` ORDER BY id DESC LIMIT 5;";
+        // return $this->conn->query($query)->fetch_assoc();
+
+    }
+    public function addToCart($name, $price, $quantity, $image, $userId)
+    {
+        $query = "INSERT INTO `cart` (`name`,`price`,`quantity`,`image`,`userId`) VALUES ('$name','$price','$quantity','$image','$userId')";
+
+        if ($this->conn->query($query)) {
+            echo 201;
+            return true;
+        } else {
+            echo 400;
+            return false;
+        }
+    }
+
+    public function getCart()
+    {
     }
 }

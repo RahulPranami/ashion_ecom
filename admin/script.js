@@ -3,7 +3,7 @@ $(document).ready(() => {
     // e.preventDefault();
     var dataString = $("#addCat").serialize();
     // console.log(dataString);
-    $("#update").validate({
+    $("#addCat").validate({
       rules: {
         name: {
           required: true,
@@ -14,7 +14,7 @@ $(document).ready(() => {
         name: "This field is required",
       },
       submitHandler: function () {
-        console.log(dataString);
+        // console.log(dataString);
         $.ajax({
           url: "../Config/addCat.php",
           method: "POST",
@@ -25,20 +25,13 @@ $(document).ready(() => {
             }
             if (res == 303) {
               alert("Category already Exists!!");
-              //   location.reload();
+              location.reload();
             }
             if (res == 201) {
               alert("Added Category Successfully!!");
               window.location.href = "./categories.php";
               //   console.log("logged In");
             }
-            // if (res == 400) {
-            //   alert("Something Went Wrong!!");
-            // }
-            // if (res == 201) {
-            //   alert("Data Updated Successfully!!");
-            //   window.location.href = "./profile.php";
-            // }
           },
         });
       },
@@ -97,5 +90,67 @@ $(document).ready(() => {
         });
       },
     });
+  });
+
+  // $("#add-prod-btn").on("click", function (e) {
+  $("#addProd").on("submit", function (e) {
+    e.preventDefault();
+    // var dataString = $("#addProd").serialize();
+    // console.log(dataString);
+    var formData = new FormData(this);
+    // console.log(formData);
+
+    $.ajax({
+      type: "POST",
+      url: "../Config/addProd.php",
+      // url: "add_product.php",
+      data: formData,
+      processData: false,
+      contentType: false,
+      success: function (res) {
+        if (res == 400) {
+          alert("Something Went Wrong!!");
+        }
+        if (res == 201) {
+          alert("Product Added Successfully!!");
+          window.location.href = "./products.php";
+          $("#addProd")[0].reset();
+        }
+      },
+    });
+
+    //   $("#addCat").validate({
+    //     rules: {
+    //       name: {
+    //         required: true,
+    //         minlength: 2,
+    //       },
+    //     },
+    //     messages: {
+    //       name: "This field is required",
+    //     },
+    //     submitHandler: function () {
+    //       // console.log(dataString);
+    //       $.ajax({
+    //         url: "../Config/addCat.php",
+    //         method: "POST",
+    //         data: dataString,
+    //         success: function (res) {
+    //           if (res == 400) {
+    //             alert("Something Went Wrong!!");
+    //           }
+    //           if (res == 303) {
+    //             alert("Category already Exists!!");
+    //             location.reload();
+    //           }
+    //           if (res == 201) {
+    //             alert("Added Category Successfully!!");
+    //             window.location.href = "./categories.php";
+    //             //   console.log("logged In");
+    //           }
+    //         },
+    //       });
+    //     },
+    //   });
   });
 });

@@ -30,7 +30,7 @@ $ecomm->checklogin();
         <div id="content-wrapper" class="d-flex flex-column">
             <div id="content">
                 <?php include './UI/navbar.php'; ?>
-                <?php include './UI/manage/editProduct.php'; ?>
+                <?php include './UI/manage/addProduct.php'; ?>
             </div>
         </div>
     </div>
