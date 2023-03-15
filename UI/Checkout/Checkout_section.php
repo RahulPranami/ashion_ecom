@@ -1,33 +1,4 @@
-<?php
-
-$cart = [];
-$total = 0;
-if (isset($_SESSION['cart'])) {
-
-    // echo '<pre>';
-
-    // print_r($_SESSION['cart']);
-    // // $product = $ecomm->getProductDetails();
-    // print_r($product);
-    // echo '</pre>';
-
-    // die();
-    foreach ($_SESSION['cart'] as $key => $value) {
-
-        // echo $key;
-        $product = $ecomm->getProductDetails($key);
-
-        // $cart[$key]['id'] = $product['id'];
-        $cart[$key]['name'] = $product['name'];
-        $cart[$key]['price'] = $product['price'];
-        $cart[$key]['qty'] = $value['qty'];
-
-        $cart[$key]['subTotal'] = $product['price'] * $value['qty'];
-    }
-}
-
-?>
-<?php foreach ($cart as $key => $value) $total += $value['price'] * $value['qty']; ?>
+<?php $cart = $ecomm->getCart(); ?>
 
 <!-- Checkout Section Begin -->
 <section class="checkout spad">
@@ -78,8 +49,8 @@ if (isset($_SESSION['cart'])) {
                             </div>
                         </div>
 
-                        <input type="hidden" name="products" value="<?php print_r($cart) ?>">
-                        <input type="hidden" name="total" value="<?= $total ?>">
+                        <input type="hidden" name="products" value="">
+                        <input type="hidden" name="total" value="<?= $ecomm->getCartTotal()[0] ?>">
                     </div>
                 </div>
                 <div class="col-lg-4">
@@ -91,22 +62,14 @@ if (isset($_SESSION['cart'])) {
                                     <span class="top__text">Product</span>
                                     <span class="top__text__right">Total</span>
                                 </li>
-                                <?php foreach ($cart as $key => $value) : ?>
-                                    <li><?= $value['name'] ?> <span>$ <?= $value['price'] ?></span></li>
-                                <?php endforeach ?>
+                                <?php while ($cartItem = $cart->fetch_assoc()) : ?>
+                                    <li><?= $cartItem['product_name'] ?> <span>$ <?= $cartItem['product_price'] ?></span></li>
+                                <?php endwhile ?>
                             </ul>
                         </div>
                         <div class="checkout__order__total">
-                            <?php
-                            // foreach ($cart as $key => $value) :
-                            // $subTotal = $value['price'] * $value['qty'];
-                            // $total += $subTotal;
-                            // $total += $value['price'] * $value['qty'];
-                            // endforeach 
-                            ?>
                             <ul>
-                                <!-- <li>Subtotal <span>$ 750.0</span></li> -->
-                                <li>Total <span>$ <?= $total ?></span></li>
+                                <li>Total <span>$ <?= $ecomm->getCartTotal()[0] ?></span></li>
                             </ul>
                         </div>
                         <div class="checkout__order__widget">

@@ -1,9 +1,9 @@
 <?php
 include_once "./config.php";
-include_once "./cart.php";
+// include_once "./cart.php";
 
 $ecomm = new ECOMM();
-$cart = new CART();
+// $cart = new CART();
 
 // print_r(json_encode($_POST['products']));
 // print_r(json_decode(json_encode($_POST['products'])));

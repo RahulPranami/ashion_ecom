@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Mar 15, 2023 at 09:53 AM
+-- Generation Time: Mar 15, 2023 at 03:24 PM
 -- Server version: 8.0.32-0ubuntu0.20.04.2
 -- PHP Version: 7.4.33
 
@@ -20,6 +20,31 @@ SET time_zone = "+00:00";
 --
 -- Database: `php_ecommerce`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `cart`
+--
+
+CREATE TABLE `cart` (
+  `id` int NOT NULL,
+  `userId` int NOT NULL,
+  `product_id` int NOT NULL,
+  `product_price` int NOT NULL,
+  `qty` int NOT NULL,
+  `product_name` varchar(255) NOT NULL,
+  `product_image` varchar(255) NOT NULL,
+  `subTotal` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `cart`
+--
+
+INSERT INTO `cart` (`id`, `userId`, `product_id`, `product_price`, `qty`, `product_name`, `product_image`, `subTotal`) VALUES
+(17, 1, 3, 321, 1, 'another', '../assets/images/shop-9.jpg', 321),
+(18, 1, 9, 423, 1, 'something', '../assets/images/shop-8.jpg', 423);
 
 -- --------------------------------------------------------
 
@@ -57,7 +82,7 @@ CREATE TABLE `orders` (
   `Postcode` decimal(6,0) NOT NULL,
   `Phone` decimal(10,0) NOT NULL,
   `Email` varchar(255) NOT NULL,
-  `products` json NOT NULL,
+  `products` int NOT NULL,
   `total` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -99,9 +124,8 @@ CREATE TABLE `product` (
 
 INSERT INTO `product` (`id`, `name`, `categoryId`, `image`, `description`, `price`, `status`, `quantity`) VALUES
 (1, 'some', 1, '../assets/images/shop-3.jpg', 'something', '123.00', NULL, 42),
-(2, 'another', 1, '../assets/images/shop-4.jpg', 'another', '322.00', NULL, 2),
+(2, 'another', 1, '../assets/images/shop-4.jpg', 'another', '342.00', NULL, 22),
 (3, 'another', 1, '../assets/images/shop-9.jpg', 'another', '321.00', NULL, 42),
-(4, 'something', 2, '../assets/images/shop-8.jpg', 'somedwesc', '456.00', NULL, 0),
 (8, 'some', 1, '../assets/images/shop-7.jpg', 'something', '223.00', NULL, 0),
 (9, 'something', 2, '../assets/images/shop-8.jpg', 'some desc', '423.00', NULL, 13),
 (14, 'some', 4, '../assets/images/shop-5.jpg', 'some Prod', '141.00', NULL, 0),
@@ -142,6 +166,13 @@ INSERT INTO `user` (`id`, `name`, `contactNumber`, `email`, `password`, `status`
 --
 
 --
+-- Indexes for table `cart`
+--
+ALTER TABLE `cart`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `userId` (`userId`,`product_id`);
+
+--
 -- Indexes for table `category`
 --
 ALTER TABLE `category`
@@ -152,7 +183,8 @@ ALTER TABLE `category`
 --
 ALTER TABLE `orders`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `userId` (`userId`);
+  ADD KEY `userId` (`userId`),
+  ADD KEY `products` (`products`);
 
 --
 -- Indexes for table `order_details`
@@ -179,6 +211,12 @@ ALTER TABLE `user`
 --
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `cart`
+--
+ALTER TABLE `cart`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `category`
@@ -218,7 +256,8 @@ ALTER TABLE `user`
 -- Constraints for table `orders`
 --
 ALTER TABLE `orders`
-  ADD CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `user` (`email`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+  ADD CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `user` (`email`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `orders_ibfk_2` FOREIGN KEY (`products`) REFERENCES `order_details` (`product_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
 -- Constraints for table `order_details`

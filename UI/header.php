@@ -47,7 +47,7 @@
                             </a></li>
                         <li><a href="./shop-cart.php"><span class="icon_bag_alt"></span>
                                 <!-- <div class="tip">2</div> -->
-                                <div class="tip" id="cart_qty"><?= $cart->totalProduct() ?? 0 ?></div>
+                                <div class="tip" id="cart_qty"><?= $ecomm->totalProduct() ?? 0 ?></div>
                             </a></li>
                     </ul>
                 </div>

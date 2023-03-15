@@ -3,10 +3,14 @@
 
 <?php
 require_once "./Config/config.php";
-require_once "./Config/cart.php";
+// require_once "./Config/cart.php";
 
 $ecomm = new ECOMM();
-$cart = new CART();
+// $cart = new CART();
+
+// echo '<pre>';
+// // print_r($_SESSION);
+// echo '</pre>';
 
 ?>
 

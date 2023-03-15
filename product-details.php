@@ -3,9 +3,9 @@
 
 <?php
 include_once "./Config/config.php";
-include_once "./Config/cart.php";
+// include_once "./Config/cart.php";
 $ecomm = new ECOMM();
-$cart = new CART();
+// $cart = new CART();
 ?>
 
 <head>

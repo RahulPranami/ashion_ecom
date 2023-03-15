@@ -163,9 +163,13 @@ class ECOMM
         return $this->conn->query($query)->fetch_assoc();
     }
 
-    public function getProducts()
+    public function getProducts($id = '')
     {
-        $query = "SELECT p.id, p.name, c.name as cName, p.description, p.price, p.image, p.quantity  FROM product as p JOIN category as c ON p.categoryId=c.id ORDER BY id;";
+        $query = "SELECT p.id, p.name, p.categoryId, c.name as cName, p.description, p.price, p.image, p.quantity FROM product as p JOIN category as c ON p.categoryId=c.id";
+
+        if ($id != '') {
+            $query .= " WHERE categoryId=$id";
+        }
 
         return $this->conn->query($query);
     }
@@ -285,18 +289,18 @@ class ECOMM
         // return $this->conn->query($query)->fetch_assoc();
 
     }
-    public function addToCart($name, $price, $quantity, $image, $userId)
-    {
-        $query = "INSERT INTO `cart` (`name`,`price`,`quantity`,`image`,`userId`) VALUES ('$name','$price','$quantity','$image','$userId')";
+    // public function addToCart($name, $price, $quantity, $image, $userId)
+    // {
+    //     $query = "INSERT INTO `cart` (`name`,`price`,`quantity`,`image`,`userId`) VALUES ('$name','$price','$quantity','$image','$userId')";
 
-        if ($this->conn->query($query)) {
-            echo 201;
-            return true;
-        } else {
-            echo 400;
-            return false;
-        }
-    }
+    //     if ($this->conn->query($query)) {
+    //         echo 201;
+    //         return true;
+    //     } else {
+    //         echo 400;
+    //         return false;
+    //     }
+    // }
 
     public function placeOrder($user, $fname, $lname, $address, $zip, $phone, $email, $products, $total)
     {
@@ -317,5 +321,114 @@ class ECOMM
         }
 
         // INSERT INTO `orders`(`userId`, `FirstName`, `LastName`, `Address`, `Postcode`, `Phone`, `Email`, `products`, `total`) VALUES ('[value-2]','[value-3]','[value-4]','[value-5]','[value-6]','[value-7]','[value-8]','[value-9]','[value-10]')
+    }
+
+    public function getCart()
+    {
+        $userId = $this->getUser()['id'];
+        $query = "SELECT * FROM `cart` WHERE userId=$userId";
+
+        return $this->conn->query($query);
+    }
+
+    public function getCartTotal()
+    {
+        $userId = $this->getUser()['id'];
+        $query = "SELECT SUM(`subTotal`) FROM `cart` WHERE userId=$userId";
+        return $this->conn->query($query)->fetch_array();
+    }
+
+    public function getProductPrice($pid)
+    {
+        $fetch = "SELECT `price` FROM `product` WHERE `id`=$pid";
+
+        return $this->conn->query($fetch)->fetch_assoc();
+    }
+
+    public function addProductToCart($pid, $qty)
+    {
+        $product = $this->getProductDetails($pid);
+
+        $userId = $this->getUser()['id'];
+
+        $productId = $product['id'];
+        $productName = $product['name'];
+        $productPrice = $product['price'];
+        $productImage = $product['image'];
+
+        $subtotal = $productPrice * $qty;
+
+        $query =  "INSERT INTO `cart`(`userId`, `product_id`, `product_price`,`qty`,`product_name`,`product_image`, `subTotal`) VALUES ('$userId','$productId','$productPrice','$qty','$productName','$productImage','$subtotal')";
+
+        if ($this->conn->query($query)) {
+            return 200;
+        } else {
+            return $this->conn->errno;
+        }
+    }
+
+    public function updateProductFromCart($pid, $qty)
+    {
+
+        print_r($_SESSION);
+        // die();
+        if (isset($_SESSION['cart'][$pid])) {
+            $_SESSION['cart'][$pid]['qty'] = $qty;
+
+            $price = $_SESSION['cart'][$pid]['price'];
+            // $_SESSION['cart'][$pid]
+            $_SESSION['cart'][$pid]['subTotal'] = $price * $qty;
+            // return count($_SESSION['cart']);
+
+            return $_SESSION['cart'][$pid]['subTotal'];
+        }
+    }
+
+    public function removeProductFromCart($pid)
+    {
+        // if (isset($_SESSION['cart'][$pid])) {
+        //     unset($_SESSION['cart'][$pid]);
+        //     return count($_SESSION['cart']);
+        // }
+
+        $userId = $this->getUser()['id'];
+        $query = "DELETE FROM `cart` WHERE product_id=$pid";
+        return $this->conn->query($query);
+
+        if ($this->conn->query($query)) {
+            return 200;
+        } else if ($this->conn->errno == 1451) {
+            return 1451;
+        } else {
+            return $this->conn->error;
+        }
+    }
+
+    public function emptyProductFromCart($pid, $qty)
+    {
+        // if (isset($_SESSION['cart'][$pid])) {
+        //     unset($_SESSION['cart'][$pid]);
+        //     return count($_SESSION['cart']);
+        // }
+
+        $userId = $this->getUser()['id'];
+        $query = "DELETE FROM `cart` WHERE userId=$userId";
+        return $this->conn->query($query);
+
+        if ($this->conn->query($query)) {
+            return 200;
+        } else if ($this->conn->errno == 1451) {
+            return 1451;
+        } else {
+            return $this->conn->error;
+        }
+    }
+
+    public function totalProduct()
+    {
+        $userId = $this->getUser()['id'];
+        $query = "SELECT COUNT(`product_id`) as totalItems FROM `cart` WHERE userId=$userId";
+
+        return $this->conn->query($query)->fetch_assoc()['totalItems'];
     }
 }

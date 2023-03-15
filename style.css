@@ -15,3 +15,18 @@
 .header__right__auth a:hover {
     color: #ca1515;
 }
+
+.out_of_stock a {
+    background-color: #6b6b6b !important;
+    color: #ffeeff !important;
+    opacity: .5 !important;
+    pointer-events: none !important;
+}
+
+.out_of_stock {
+    cursor: not-allowed !important;
+}
+
+.catActive a {
+    color: #6b6b6b !important;
+}
