@@ -45,7 +45,7 @@
                                     <ul class="product__hover">
                                         <li><a href="#" data-toggle="modal" data-target="#productModal" data-id="<?= $product['id'] ?>" data-productname="<?= $product['name'] ?? "Furry hooded parka" ?>" data-productprice="<?= $product['price'] ?? '59.0' ?>" data-productdesc="<?= $product['description'] ?>" data-setbg="./assets/images/<?= basename($product['image']) ?>"><span class="arrow_expand"></span></a></li>
                                         <li><a href="javascript:void(0);" onclick="addToWishlist('<?= $product['id'] ?>','add')"><span class="icon_heart_alt"></span></a></li>
-                                        <li class="disabled <?= $product['quantity'] == 0 ? "out_of_stock" : "" ?>"><a href="javascript:void(0);" onclick="addToCart('<?= $product['id'] ?>','add')"><span class="icon_bag_alt"></span></a></li>
+                                        <li class="addToCart <?= $product['quantity'] == 0 ? "out_of_stock" : "" ?>" id="<?= $product['id'] ?>"><a href="javascript:void(0);"><span class="icon_bag_alt"></span></a></li>
                                     </ul>
                                 </div>
                                 <div class="product__item__text">

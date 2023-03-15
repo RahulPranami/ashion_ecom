@@ -57,7 +57,7 @@
             <div class="col-lg-3 col-md-2 col-sm-2 text-center">
                 <div class="py-2 border border-warning border-rounded d-flex justify-content-around bg-light">
                     <h5 class=""> Total :- </h5>
-                    <span class="text-secondary">$ <?= $ecomm->getCartTotal()[0] ?></span>
+                    <span class="text-secondary">$ <?= $ecomm->getCartTotal()[0] ?? 0 ?></span>
                 </div>
             </div>
             <div class="">
@@ -69,31 +69,6 @@
                 <a href="./checkout.php" class="btn btn-outline-danger">Proceed to checkout > ></a>
                 <!-- </div> -->
             </div>
-        </div>
-        <div class="row">
-            <!-- <div class="col-lg-6">
-                <div class="discount__content">
-                    <h6>Discount codes</h6>
-                    <form action="#">
-                        <input type="text" placeholder="Enter your coupon code">
-                        <button type="submit" class="site-btn">Apply</button>
-                    </form>
-                </div>
-            </div> -->
-            <!-- <div class="col-lg-4">
-                <div class="cart__total__procced">
-                    <h6>Cart total</h6>
-
-                    <?php foreach ($cart as $key => $value) :
-                        $subTotal = $value['price'] * $value['qty'];
-                        $total += $subTotal;
-                    endforeach ?>
-                    <ul>
-                        <li>Total <span>$ <?= $total ?></span></li>
-                    </ul>
-                    <a href="./checkout.php" class="btn primary-btn">Proceed to checkout</a>
-                </div>
-            </div> -->
         </div>
     </div>
 </section>

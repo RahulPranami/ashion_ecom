@@ -69,7 +69,7 @@
                         </div>
                         <div class="checkout__order__total">
                             <ul>
-                                <li>Total <span>$ <?= $ecomm->getCartTotal()[0] ?></span></li>
+                                <li>Total <span>$ <?= $ecomm->getCartTotal()[0] ?? 0 ?></span></li>
                             </ul>
                         </div>
                         <div class="checkout__order__widget">

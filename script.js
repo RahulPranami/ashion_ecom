@@ -53,7 +53,7 @@ $(document).ready(() => {
               //   console.log("logged In");
             }
             if (res == "user") {
-              window.location.href = "./thankyou.php";
+              window.location.href = "./index.php";
               // console.log("user");
             }
             if (res == "admin") {
@@ -161,30 +161,7 @@ $(document).ready(() => {
     modal.find("#productDesc").text(desc);
   });
 
-  // $(".cart__quantity .pro-qty").on("click", function (e) {
-  //   // console.log(this.children[1].value);
-  //   let pid = this.getAttribute("id");
-  //   qty = this.children[1].value;
-
-  //   let subtotal = this.parentNode.nextElementSibling.children[0].textContent;
-  //   // console.log(subtotal);
-
-  //   type = "update";
-
-  //   $.ajax({
-  //     url: "./Config/manageCart.php",
-  //     method: "POST",
-  //     data: "productId=" + pid + "&qty=" + qty + "&type=" + type,
-  //     success: function (res) {
-  //       //     // $("#cart_qty").text(res);
-  //       // subtotal = res;
-  //       //     location.reload();
-  //     },
-  //   });
-  // });
-
   $(".cart__quantity .pro-qty").on("click", function (e) {
-    // console.log(this.children[1].value);
     let pid = this.getAttribute("id");
     qty = this.children[1].value;
 
@@ -196,30 +173,73 @@ $(document).ready(() => {
       data: "productId=" + pid + "&qty=" + qty + "&type=" + type,
       success: function (res) {
         // $("#cart_qty").text(res);
-        location.reload();
+        if (res == 200) {
+          alert("Cart Updated SuccessFully");
+          location.reload();
+        } else {
+          alert(res);
+        }
       },
     });
   });
 
   $(".icon_close").on("click", function (e) {
     let pid = this.getAttribute("value");
-    // let pid = $(this).attr("value");
     let type = "remove";
-    // let tr = this.parentNode.parentNode;
-    // console.log(tr);
 
     $.ajax({
       url: "./Config/manageCart.php",
       method: "POST",
       data: "productId=" + pid + "&type=" + type,
       success: function (res) {
-        // $("#cart_qty").text(res);
-        // $("#cart_qty").text(res);
-        // tr.remove();
-
         if (res == 200) {
           alert("Item Deleted Successfully");
-        } else if (res) location.reload();
+          location.reload();
+        } else if (res) {
+          alert(res);
+        }
+      },
+    });
+  });
+
+  $("#emptyCart").on("click", function (e) {
+    let type = "empty";
+
+    $.ajax({
+      url: "./Config/manageCart.php",
+      method: "POST",
+      data: "type=" + type,
+      success: function (res) {
+        if (res == 200) {
+          alert("Cart Is Empty Now !!!");
+          location.reload();
+        } else if (res) {
+          alert(res);
+        }
+      },
+    });
+  });
+
+  $(".addToCart").on("click", function (e) {
+    console.log(this);
+    let pid = this.getAttribute("id");
+    // let pid = $(this).attr("value");
+    let type = "add";
+    let qty = 1;
+    $.ajax({
+      url: "./Config/manageCart.php",
+      method: "POST",
+      data: "productId=" + pid + "&qty=" + qty + "&type=" + type,
+      success: function (res) {
+        console.log(res);
+        if (res == 200) {
+          alert("Product Added Successfully");
+          location.reload();
+        } else if (res == 1062) {
+          alert("Product Already Exists !!!");
+        } else {
+          alert("Something Went Wrong !!!");
+        }
       },
     });
   });
@@ -229,7 +249,6 @@ $(document).ready(() => {
     e.preventDefault();
     // var dataString = $("#checkoutForm").serialize();
     let formData = new FormData(this);
-
     console.log(formData);
 
     $.ajax({
@@ -250,24 +269,3 @@ $(document).ready(() => {
     });
   });
 });
-
-function addToCart(pid, type, qty = 1) {
-  $.ajax({
-    url: "./Config/manageCart.php",
-    method: "POST",
-    data: "productId=" + pid + "&qty=" + qty + "&type=" + type,
-    // data: "productId=" + pid + "&type=" + type,
-    success: function (res) {
-      console.log(res);
-      if (res == 200) {
-        alert("Product Added Successfully");
-      } else if (res == 1062) {
-        alert("Product Already Exists !!!");
-      } else {
-        alert("Something Went Wrong !!!");
-      }
-      // console.log(res);
-      // $("#cart_qty").text(res);
-    },
-  });
-}
