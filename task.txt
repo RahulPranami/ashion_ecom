@@ -22,9 +22,3 @@ Admin login
 Customer management (add, delete, update customer details)
 Product (add, delete, update products)
 Manage stocks of products
-
-6+10+8+13+5+5+13 = 60 
-60/8.5 = 7
-
-
-scp -r ashion_ecomm remote:/home/ubuntu/php_ecom

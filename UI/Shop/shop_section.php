@@ -60,7 +60,7 @@
                                 <div class="product__item__pic set-bg" data-setbg="./assets/images/<?= basename($product['image']) ?>">
                                     <!-- <div class="label new">New</div> -->
                                     <div class="label new">
-                                        <!-- <?= $product['quantity'] == 0 ? "Out Of Stock" : "" ?> -->
+                                        <?= $product['quantity'] == 0 ? "Out Of Stock" : "" ?>
                                     </div>
 
                                     <!-- <div class="label">Sale</div> -->
