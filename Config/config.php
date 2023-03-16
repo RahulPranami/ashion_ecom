@@ -170,7 +170,7 @@ class ECOMM
 
     public function getUsers()
     {
-        $query = "SELECT * FROM user";
+        $query = "SELECT * FROM user WHERE role='user'";
         return $this->conn->query($query);
     }
     public function getUserDetails($id)
@@ -299,6 +299,52 @@ class ECOMM
         }
     }
 
+    // public function placeOrder()
+    // {
+    public function placeOrder($userId, $fname, $lname, $address, $zip, $phone, $email, $total)
+    {
+        // $query = "INSERT INTO `orders`(`userId`, `FirstName`, `LastName`, `Address`, `Postcode`, `Phone`, `Email`, `products`, `total`) VALUES ('1','1','1','1','1','1','1','1','1')";
+
+        // create a query to join the orders table with the order details table
+        // $query = "SELECT * FROM orders JOIN order_details ON orders.id = order_details.order_id";
+
+        // insert cart details into the order details table
+        // $query = "INSERT INTO order_details (order_id, product_id, quantity, price) VALUES (1, 1, 1, 1)";
+
+        // generate a join query for order and order details
+        // $query = "SELECT * FROM orders JOIN order_details ON orders.id = order_details.order_id";
+        // create a function for placing order from cart items for ecommerce website using php
+        $query = "INSERT INTO `orders`(`userId`, `FirstName`, `LastName`, `Address`, `Postcode`, `Phone`, `Email`, `total`) VALUES ('$userId','$fname','$lname','$address','$zip','$phone','$email','$total')";
+        // $query = "INSERT INTO `orders`(`userId`, `FirstName`, `LastName`, `Address`, `Postcode`, `Phone`, `Email`, `products`, `total`) VALUES ('1','1','1','1','1','1','1','1','1')";
+
+        if ($this->conn->query($query)) {
+
+            $lastID = $this->conn->insert_id;
+
+            $cart = $this->getCart();
+
+            while ($cartItem = $cart->fetch_assoc()) {
+                $query = "INSERT INTO `order_details`(`order_id`, `product_id`, `quantity`, `price`) VALUES ('$lastID','" . $cartItem['product_id'] . "','" . $cartItem['quantity'] . "','" . $cartItem['price'] . "')";
+                $this->conn->query($query);
+            }
+            //   endwhile;
+            // for($i = 0; $length = count($foodValues) > $i; $i++){
+            //     $stmt->bind_param("is", $lastID, $food);
+            //     $food = $foodValues[$i];
+            //     $stmt->execute();
+            // }
+
+            // $query = "INSERT INTO `order_details`(`order_id`, `product_id`, `quantity`, `price`) VALUES ('1','1','1','1')";
+
+
+            // echo 201;
+            return true;
+        } else {
+            // echo 400;
+            echo $this->conn->error;
+            return false;
+        }
+    }
     // public function placeOrder($user, $fname, $lname, $address, $zip, $phone, $email, $products, $total)
     // {
     //     $product = json_encode($products);

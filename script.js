@@ -261,7 +261,7 @@ $(document).ready(() => {
         console.log(res);
         if (res == 201) {
           // alert("Signed Up Successfully!!");
-          window.location.href = "./thankyou.php";
+          // window.location.href = "./thankyou.php";
         } else {
           alert("Something Went Wrong!!" + res);
         }

@@ -49,7 +49,6 @@
                             </div>
                         </div>
 
-                        <input type="hidden" name="products" value="">
                         <input type="hidden" name="total" value="<?= $ecomm->getCartTotal()[0] ?>">
                     </div>
                 </div>
