@@ -13,8 +13,9 @@
                 <nav class="header__menu">
                     <ul>
                         <li class="<?= ($cURL == "index" || $cURL == "login" || $cURL == "signup") ? 'active' : ''; ?>"><a href="./index.php">Home</a></li>
-                        <li><a href="#">Women’s</a></li>
-                        <li><a href="#">Men’s</a></li>
+                        <!-- <li><a href="#">Women’s</a></li> -->
+                        <!-- <li><a href="#">Men’s</a></li> -->
+                        <li class="<?= ($cURL == "orders") ? 'active' : ''; ?>"><a href="./orders.php">Orders</a></li>
                         <li class="<?= ($cURL == "shop" || $cURL == "product-details") ? 'active' : ''; ?>"><a href="./shop.php">Shop</a></li>
                         <li class="<?= ($cURL == "shop-cart" || $cURL == "checkout" || $cURL == "thankyou") ? 'active' : ''; ?>"><a href="#">Pages</a>
                             <ul class="dropdown">
@@ -22,6 +23,7 @@
                                 <li><a href="./shop-cart.php">Shop Cart</a></li>
                                 <li><a href="./checkout.php">Checkout</a></li>
                                 <li><a href="./blog-details.php">Blog Details</a></li>
+                                <li><a href="./orders.php">My Orders</a></li>
                             </ul>
                         </li>
                         <li class="<?= ($cURL == "blog-details" || $cURL == "blog") ? 'active' : ''; ?>"><a href="./blog.php">Blog</a></li>

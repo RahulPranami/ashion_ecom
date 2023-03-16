@@ -1,4 +1,5 @@
 <?php $cart = $ecomm->getCart(); ?>
+<?php $user = $ecomm->getUser(); ?>
 
 <!-- Checkout Section Begin -->
 <section class="checkout spad">
@@ -17,7 +18,7 @@
                         <div class="col-lg-6 col-md-6 col-sm-6">
                             <div class="checkout__form__input">
                                 <p>First Name <span>*</span></p>
-                                <input type="text" name="fname">
+                                <input type="text" name="fname" value="<?= $user['name'] ?>" required>
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-6">
@@ -29,23 +30,23 @@
                         <div class="col-lg-12">
                             <div class="checkout__form__input">
                                 <p>Address <span>*</span></p>
-                                <input type="text" placeholder="Street Address" name="address">
+                                <input type="text" placeholder="Street Address" name="address" value="<?= $user['address'] ?>" required>
                             </div>
                             <div class="checkout__form__input">
                                 <p>Postcode/Zip <span>*</span></p>
-                                <input type="text" name="zip">
+                                <input type="text" name="zip" required>
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-6">
                             <div class="checkout__form__input">
                                 <p>Phone <span>*</span></p>
-                                <input type="text" name="phone">
+                                <input type="text" name="phone" value="<?= $user['contactNumber'] ?>" required>
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-6">
                             <div class="checkout__form__input">
                                 <p>Email <span>*</span></p>
-                                <input type="text" name="email">
+                                <input type="text" name="email" value="<?= $user['email'] ?>" required>
                             </div>
                         </div>
 
@@ -71,14 +72,14 @@
                                 <li>Total <span>$ <?= $ecomm->getCartTotal()[0] ?? 0 ?></span></li>
                             </ul>
                         </div>
-                        <div class="checkout__order__widget">
-                            <span class="d-block">Payment Method :- </span>
+                        <div class="checkout__order__widget row">
+                            <span class="d-block mr-2">Payment Method :- </span>
 
-                            <span class="d-block ml-5 text-secondary">Cash on Delivery</span>
-                            <!-- <label for="cod"> Cash on Delivery -->
-                            <!-- <input type="checkbox" id="cod"> -->
-                            <!-- <span class="checkmark"></span> -->
-                            <!-- </label> -->
+                            <!-- <span class="d-block ml-5 text-secondary">Cash on Delivery</span> -->
+                            <label for="cod"> Cash on Delivery
+                                <input type="checkbox" id="cod" name="paymentMethod" value="COD" checked required>
+                                <span class="checkmark"></span>
+                            </label>
                         </div>
                         <button type="submit" class="checkout-btn btn btn-outline-success">Place order</button>
                     </div>

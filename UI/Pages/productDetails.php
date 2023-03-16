@@ -6,6 +6,7 @@
         <div class="row">
             <div class="col-lg-6">
                 <div class="product__details__pic">
+
                     <!-- <div class="product__details__pic__left product__thumb nice-scroll">
                         <a class="pt active" href="#product-1">
                             <img src="img/product/details/thumb-1.jpg" alt="">
@@ -49,66 +50,29 @@
                                 <input type="text" value="1" id="qty">
                             </div>
                         </div>
-                        <a href="javascript:void(0);" class="cart-btn" onclick="addToCart('<?= $product['id'] ?>','add',document.getElementById('qty').value)"><span class="icon_bag_alt"></span> Add to cart</a>
+                        <a href="javascript:void(0);" class="cart-btn addToCart" id="<?= $product['id'] ?>"><span class="icon_bag_alt"></span> Add to cart</a>
                         <ul>
                             <li><a href="#"><span class="icon_heart_alt"></span></a></li>
                             <!-- <li><a href="#"><span class="icon_adjust-horiz"></span></a></li> -->
                         </ul>
                     </div>
+
                     <div class="product__details__widget">
                         <ul>
                             <li>
                                 <span>Availability:</span>
-                                <div class="stock__checkbox">
+                                <div class="label <?= $product['quantity'] == 0 ? "stockout stockblue" : "new" ?> ">
+                                    <?= $product['quantity'] == 0 ? "Out Of Stock" : "Available" ?>
+                                </div>
+                                <!-- <div class="stock__checkbox">
                                     <label for="stockin">
                                         In Stock
                                         <input type="checkbox" id="stockin">
                                         <span class="checkmark"></span>
                                     </label>
-                                </div>
+                                </div> -->
+
                             </li>
-                            <!-- <li>
-                                <span>Available color:</span>
-                                <div class="color__checkbox">
-                                    <label for="red">
-                                        <input type="radio" name="color__radio" id="red" checked>
-                                        <span class="checkmark"></span>
-                                    </label>
-                                    <label for="black">
-                                        <input type="radio" name="color__radio" id="black">
-                                        <span class="checkmark black-bg"></span>
-                                    </label>
-                                    <label for="grey">
-                                        <input type="radio" name="color__radio" id="grey">
-                                        <span class="checkmark grey-bg"></span>
-                                    </label>
-                                </div>
-                            </li>
-                            <li>
-                                <span>Available size:</span>
-                                <div class="size__btn">
-                                    <label for="xs-btn" class="active">
-                                        <input type="radio" id="xs-btn">
-                                        xs
-                                    </label>
-                                    <label for="s-btn">
-                                        <input type="radio" id="s-btn">
-                                        s
-                                    </label>
-                                    <label for="m-btn">
-                                        <input type="radio" id="m-btn">
-                                        m
-                                    </label>
-                                    <label for="l-btn">
-                                        <input type="radio" id="l-btn">
-                                        l
-                                    </label>
-                                </div>
-                            </li>
-                            <li>
-                                <span>Promotions:</span>
-                                <p>Free shipping</p>
-                            </li> -->
                         </ul>
                     </div>
                 </div>

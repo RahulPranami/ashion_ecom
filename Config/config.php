@@ -106,6 +106,9 @@ class ECOMM
                 header('location: ../login.php');
                 return false;
             }
+        } else {
+            header('location: ../login.php');
+            return false;
         }
     }
 
@@ -117,7 +120,9 @@ class ECOMM
             }
         } else {
             // header('location: ./login.php');
-            return;
+            // echo 404;
+            // return;
+            return 404;
         }
     }
 
@@ -299,101 +304,6 @@ class ECOMM
         }
     }
 
-    // public function placeOrder()
-    // {
-    public function placeOrder($userId, $fname, $lname, $address, $zip, $phone, $email, $total)
-    {
-        // $query = "INSERT INTO `orders`(`userId`, `FirstName`, `LastName`, `Address`, `Postcode`, `Phone`, `Email`, `products`, `total`) VALUES ('1','1','1','1','1','1','1','1','1')";
-
-        // create a query to join the orders table with the order details table
-        // $query = "SELECT * FROM orders JOIN order_details ON orders.id = order_details.order_id";
-
-        // insert cart details into the order details table
-        // $query = "INSERT INTO order_details (order_id, product_id, quantity, price) VALUES (1, 1, 1, 1)";
-
-        // generate a join query for order and order details
-        // $query = "SELECT * FROM orders JOIN order_details ON orders.id = order_details.order_id";
-        // create a function for placing order from cart items for ecommerce website using php
-        $query = "INSERT INTO `orders`(`userId`, `FirstName`, `LastName`, `Address`, `Postcode`, `Phone`, `Email`, `total`) VALUES ('$userId','$fname','$lname','$address','$zip','$phone','$email','$total')";
-        // $query = "INSERT INTO `orders`(`userId`, `FirstName`, `LastName`, `Address`, `Postcode`, `Phone`, `Email`, `products`, `total`) VALUES ('1','1','1','1','1','1','1','1','1')";
-
-        if ($this->conn->query($query)) {
-
-            $lastID = $this->conn->insert_id;
-
-            $cart = $this->getCart();
-
-            while ($cartItem = $cart->fetch_assoc()) {
-                $query = "INSERT INTO `order_details`(`order_id`, `product_id`, `quantity`, `price`) VALUES ('$lastID','" . $cartItem['product_id'] . "','" . $cartItem['quantity'] . "','" . $cartItem['price'] . "')";
-                $this->conn->query($query);
-            }
-            //   endwhile;
-            // for($i = 0; $length = count($foodValues) > $i; $i++){
-            //     $stmt->bind_param("is", $lastID, $food);
-            //     $food = $foodValues[$i];
-            //     $stmt->execute();
-            // }
-
-            // $query = "INSERT INTO `order_details`(`order_id`, `product_id`, `quantity`, `price`) VALUES ('1','1','1','1')";
-
-
-            // echo 201;
-            return true;
-        } else {
-            // echo 400;
-            echo $this->conn->error;
-            return false;
-        }
-    }
-    // public function placeOrder($user, $fname, $lname, $address, $zip, $phone, $email, $products, $total)
-    // {
-    //     $product = json_encode($products);
-
-    //     $query = "INSERT INTO `orders`(`userId`, `FirstName`, `LastName`, `Address`, `Postcode`, `Phone`, `Email`, `products`, `total`) VALUES ('$user','$fname','$lname','$address','$zip','$phone','$email','$product','$total')";
-
-    //     if ($this->conn->query($query)) {
-    //         echo 201;
-    //         return true;
-    //     } else {
-    //         // echo 400;
-    //         echo $this->conn->error;
-    //         return false;
-    //     }
-
-    //  INSERT INTO orders (userid, timestamp) SELECT o.userid, o.timestamp FROM users u INNER JOIN orders o ON  o.userid = u.id
-
-
-    // // Declare the query
-    // $sql = "INSERT INTO userTable(name) VALUES(?)";
-
-    // // Prepare and bind
-    // $stmt = $conn->prepare($sql);
-    // $stmt->bind_param("s", $name);
-
-    // // Execute the query
-    // $stmt->execute();
-
-    // // Fetch last inserted id
-    // $lastID = $conn->insert_id;
-
-    // $sql = "INSERT INTO foodTable(userId, food) VALUES(?, ?)";
-    // $stmt = $conn->prepare($sql);
-
-    // for($i = 0; $length = count($foodValues) > $i; $i++){
-    //     $stmt->bind_param("is", $lastID, $food);
-    //     $food = $foodValues[$i];
-    //     $stmt->execute();
-    // }
-    // // Commits the query / queries
-    // $conn->commit();
-
-    // // Close connection
-    // $stmt->close();
-    // $conn->close();
-
-    //     // INSERT INTO `orders`(`userId`, `FirstName`, `LastName`, `Address`, `Postcode`, `Phone`, `Email`, `products`, `total`) VALUES ('[value-2]','[value-3]','[value-4]','[value-5]','[value-6]','[value-7]','[value-8]','[value-9]','[value-10]')
-    // }
-
     public function getCart()
     {
         $this->checkUserLogin();
@@ -411,19 +321,18 @@ class ECOMM
         return $this->conn->query($query)->fetch_array();
     }
 
-    public function getProductPrice($pid)
-    {
-        $fetch = "SELECT `price` FROM `product` WHERE `id`=$pid";
-
-        return $this->conn->query($fetch)->fetch_assoc();
-    }
-
     public function addProductToCart($pid, $qty)
     {
         $product = $this->getProductDetails($pid);
 
         $this->checkUserLogin();
+
         $userId = $this->getUser()['id'];
+
+        // return $product['quantity'];
+        if ($qty > $product['quantity']) {
+            return 429;
+        }
 
         $productId = $product['id'];
         $productName = $product['name'];
@@ -445,9 +354,15 @@ class ECOMM
     {
         $this->checkUserLogin();
 
+        $product = $this->getProductDetails($pid);
         // $query = "SELECT * FROM `cart` WHERE userId=$userId ";
         $userId = $this->getUser()['id'];
-        $subtotal = $this->getProductPrice($pid)['price'] * $qty;
+
+        if ($qty > $product['quantity']) {
+            return 429;
+        }
+
+        $subtotal = $product['price'] * $qty;
         // $query = "SELECT * FROM (SELECT * FROM `cart` WHERE userId=$userId) AS userCart WHERE product_id=$pid;";
         // $query = "SELECT * FROM `cart` WHERE userId=$userId && product_id=$pid;";
 
@@ -479,10 +394,6 @@ class ECOMM
 
     public function emptyProductFromCart()
     {
-        // if (isset($_SESSION['cart'][$pid])) {
-        //     unset($_SESSION['cart'][$pid]);
-        //     return count($_SESSION['cart']);
-        // }
         $this->checkUserLogin();
 
         $userId = $this->getUser()['id'];
@@ -508,4 +419,84 @@ class ECOMM
             return $this->conn->query($query)->fetch_assoc()['totalItems'];
         }
     }
+
+    public function placeOrder($userId, $fname, $lname, $address, $zip, $phone, $email, $total, $paymentMethod)
+    {
+        $query = "INSERT INTO `orders`(`userId`, `FirstName`, `LastName`, `Address`, `Postcode`, `Phone`, `Email`, `total`,`paymentMethod`) VALUES ('$userId','$fname','$lname','$address','$zip','$phone','$email','$total','$paymentMethod')";
+
+        if ($this->conn->query($query)) {
+
+            $lastID = $this->conn->insert_id;
+
+            $cart = $this->getCart();
+
+            while ($cartItem = $cart->fetch_assoc()) :
+                $price = $cartItem['product_price'];
+                // $uid = $cartItem['userId'];
+                $pid = $cartItem['product_id'];
+                // $pname = $cartItem['product_name'];
+                $pqty = $cartItem['qty'];
+                $ptotal = $cartItem['subTotal'];
+
+                // $query .= "('$lastID','$pid','$pqty','$price','$ptotal')";
+                $query = "INSERT INTO `order_details`(`order_id`, `product_id`, `product_qty`, `product_price`, `subTotal`) VALUES ('$lastID','$pid','$pqty','$price','$ptotal')";
+
+                if ($this->conn->query($query)) {
+                    $this->updateStock($pid, $pqty);
+                } else {
+                    return $this->conn->error;
+                }
+            endwhile;
+
+            $this->emptyProductFromCart();
+            // return;
+            return 201;
+        } else {
+            return $this->conn->error;
+        }
+    }
+
+    public function updateStock($pid, $qty)
+    {
+        $currentStockQuery = "SELECT `quantity` FROM `product` WHERE `id`=$pid";
+        $cStock = $this->conn->query($currentStockQuery)->fetch_assoc()['quantity'];
+
+        $newStock = $cStock - $qty;
+
+        $query = "UPDATE `product` SET `quantity`='$newStock' WHERE `id`=$pid";
+
+        if ($this->conn->query($query)) {
+        } else {
+            return $this->conn->error;
+        }
+    }
+
+    public function getOrders($id = '')
+    {
+        // $query = "SELECT * FROM orders JOIN order_details ON orders.id = order_details.order_id";
+        $query = "SELECT * FROM orders";
+        if ($id != '') {
+            $query .= " WHERE `userId`='$id';";
+        }
+
+        // return $query;
+
+        return $this->conn->query($query) ?? $this->conn->error;
+    }
+
+    public function getOrderDetails($id = '')
+    {
+        // $query = "SELECT * FROM order_details JOIN product ON order_details.product_id = product.id";
+
+        $query = "SELECT od.id, od.order_id, p.name as product_name, p.image, od.product_qty, od.product_price, od.subTotal FROM order_details as od JOIN product as p ON od.product_id = p.id ";
+        if ($id != '') {
+            $query .= " WHERE order_id=$id";
+        }
+        // return $query;
+        return $this->conn->query($query) ?? $this->conn->error;
+    }
+
+    // public function buyNow($pid, $qty)
+    // {
+    // }
 }

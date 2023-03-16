@@ -184,6 +184,25 @@ $(document).ready(() => {
         if (res == 200) {
           alert("Product Deleted Successfully!!");
           location.reload();
+        } else if (res == 1451) {
+          alert("There are previous orders depending on it!!");
+        } else {
+          alert(res);
+        }
+      },
+    });
+  });
+
+  $(".delete-order-btn").on("click", function (e) {
+    $.ajax({
+      url: "../Config/delete.php",
+      method: "POST",
+      data: "order&id=" + this.id + "&tbl=" + "orders",
+      success: function (res) {
+        console.log(res);
+        if (res == 200) {
+          alert("Order Deleted Successfully!!");
+          location.reload();
         } else {
           alert(res);
         }

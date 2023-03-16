@@ -54,6 +54,13 @@
             <span>Categories</span></a>
     </li>
 
+    <!-- Nav Item - Tables -->
+    <li class="nav-item <?= ($cURL == "orders" || $cURL == "ordersDetails") ? 'active' : ''; ?>">
+        <a class="nav-link" href="orders.php">
+            <i class="fas fa-fw fa-shopping-bag"></i>
+            <span>Orders</span></a>
+    </li>
+
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
 

@@ -11,7 +11,9 @@
             </div>
             <div class="text-center">
                 <h1>Thank You !</h1>
-                <p>We've send the link to your inbox. Lorem ipsum dolor sit,lorem lorem </p>
+                <p>Your Order has been placed successfully. </p>
+                <p>You can continue shopping. </p>
+                <!-- <p>We've send the link to your inbox. Lorem ipsum dolor sit,lorem lorem </p> -->
                 <!-- <button class="btn btn-outline-success">Back Home</button> -->
                 <a href="./index.php" class="btn btn-outline-success">Back Home</a>
             </div>

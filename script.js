@@ -1,7 +1,7 @@
 $(document).ready(() => {
   $("#login-btn").on("click", function (e) {
     // e.preventDefault();
-    var dataString = $("#login").serialize();
+    // var dataString = $("#login").serialize();
 
     $("#login").validate({
       rules: {
@@ -33,6 +33,7 @@ $(document).ready(() => {
         }
       },
       submitHandler: function () {
+        var dataString = $("#login").serialize();
         $.ajax({
           url: "./Config/login.php",
           method: "POST",
@@ -68,7 +69,6 @@ $(document).ready(() => {
 
   $("#signup-btn").on("click", function (e) {
     // e.preventDefault();
-    var dataString = $("#signup").serialize();
 
     $("#signup").validate({
       rules: {
@@ -116,6 +116,7 @@ $(document).ready(() => {
         }
       },
       submitHandler: function () {
+        var dataString = $("#signup").serialize();
         $.ajax({
           url: "./Config/signup.php",
           method: "POST",
@@ -176,6 +177,9 @@ $(document).ready(() => {
         if (res == 200) {
           alert("Cart Updated SuccessFully");
           location.reload();
+        } else if (res == 429) {
+          alert("Product Does Not Have That Much Stock !!!");
+          location.reload();
         } else {
           alert(res);
         }
@@ -187,15 +191,34 @@ $(document).ready(() => {
     let pid = this.getAttribute("value");
     let type = "remove";
 
+    if (confirm("Are You Sure You want to delete this product")) {
+      $.ajax({
+        url: "./Config/manageCart.php",
+        method: "POST",
+        data: "productId=" + pid + "&type=" + type,
+        success: function (res) {
+          if (res == 200) {
+            alert("Item Deleted Successfully");
+            location.reload();
+          } else if (res) {
+            alert(res);
+          }
+        },
+      });
+    }
+  });
+
+  $(".delete-order-btn").on("click", function (e) {
     $.ajax({
-      url: "./Config/manageCart.php",
+      url: "./Config/delete.php",
       method: "POST",
-      data: "productId=" + pid + "&type=" + type,
+      data: "order&id=" + this.id + "&tbl=" + "orders",
       success: function (res) {
+        console.log(res);
         if (res == 200) {
-          alert("Item Deleted Successfully");
+          alert("Order Deleted Successfully!!");
           location.reload();
-        } else if (res) {
+        } else {
           alert(res);
         }
       },
@@ -221,36 +244,40 @@ $(document).ready(() => {
   });
 
   $(".addToCart").on("click", function (e) {
-    console.log(this);
     let pid = this.getAttribute("id");
-    // let pid = $(this).attr("value");
+    let qty = this.getAttribute("qty") ?? document.getElementById("qty").value;
     let type = "add";
-    let qty = 1;
+
+    if (qty == "0") {
+      alert("Product Is Out Of Stock !!!");
+      return;
+    }
     $.ajax({
       url: "./Config/manageCart.php",
       method: "POST",
       data: "productId=" + pid + "&qty=" + qty + "&type=" + type,
       success: function (res) {
-        console.log(res);
+        // console.log(res);
         if (res == 200) {
           alert("Product Added Successfully");
           location.reload();
         } else if (res == 1062) {
           alert("Product Already Exists !!!");
+        } else if (res == 404) {
+          location.href = "./login.php";
+          // alert("Product Already Exists !!!");
+        } else if (res == 429) {
+          alert("Product Does Not Have That Much Stock !!!");
         } else {
-          alert("Something Went Wrong !!!");
+          alert("Something Went Wrong !!!" + res);
         }
       },
     });
   });
 
-  // checkoutForm;
   $("#checkoutForm").on("submit", function (e) {
     e.preventDefault();
-    // var dataString = $("#checkoutForm").serialize();
     let formData = new FormData(this);
-    console.log(formData);
-
     $.ajax({
       url: "./Config/checkout.php",
       method: "POST",
@@ -262,6 +289,9 @@ $(document).ready(() => {
         if (res == 201) {
           // alert("Signed Up Successfully!!");
           // window.location.href = "./thankyou.php";
+          // alert(res);
+          alert("Order Placed Successfully!!");
+          window.location.href = "./thankyou.php";
         } else {
           alert("Something Went Wrong!!" + res);
         }
