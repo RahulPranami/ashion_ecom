@@ -155,7 +155,7 @@ $(document).ready(() => {
     modal.find("#productname").text(name);
     $("#productImage").attr("src", img);
 
-    $("#buyNow").attr("href", "./checkout.php?pid=" + id);
+    $("#buyNow").attr("href", "./checkout.php?buyNow=" + id);
     $("#seeMore").attr("href", "./product-details.php?pid=" + id);
 
     modal.find("#productPrice").text(price);
@@ -175,7 +175,7 @@ $(document).ready(() => {
       success: function (res) {
         // $("#cart_qty").text(res);
         if (res == 200) {
-          alert("Cart Updated SuccessFully");
+          // alert("Cart Updated SuccessFully");
           location.reload();
         } else if (res == 429) {
           alert("Product Does Not Have That Much Stock !!!");
@@ -227,20 +227,21 @@ $(document).ready(() => {
 
   $("#emptyCart").on("click", function (e) {
     let type = "empty";
-
-    $.ajax({
-      url: "./Config/manageCart.php",
-      method: "POST",
-      data: "type=" + type,
-      success: function (res) {
-        if (res == 200) {
-          alert("Cart Is Empty Now !!!");
-          location.reload();
-        } else if (res) {
-          alert(res);
-        }
-      },
-    });
+    if (confirm("Are You Sure You Want to Empty Cart ??")) {
+      $.ajax({
+        url: "./Config/manageCart.php",
+        method: "POST",
+        data: "type=" + type,
+        success: function (res) {
+          if (res == 200) {
+            alert("Cart Is Empty Now !!!");
+            location.reload();
+          } else if (res) {
+            alert(res);
+          }
+        },
+      });
+    }
   });
 
   $(".addToCart").on("click", function (e) {
@@ -278,6 +279,7 @@ $(document).ready(() => {
   $("#checkoutForm").on("submit", function (e) {
     e.preventDefault();
     let formData = new FormData(this);
+
     $.ajax({
       url: "./Config/checkout.php",
       method: "POST",
@@ -287,8 +289,6 @@ $(document).ready(() => {
       success: function (res) {
         console.log(res);
         if (res == 201) {
-          // alert("Signed Up Successfully!!");
-          // window.location.href = "./thankyou.php";
           // alert(res);
           alert("Order Placed Successfully!!");
           window.location.href = "./thankyou.php";
@@ -298,4 +298,34 @@ $(document).ready(() => {
       },
     });
   });
+
+  // $(".buyNow").on("click", function (e) {
+  //   let pid = this.getAttribute("id");
+  //   let qty = this.getAttribute("qty") ?? document.getElementById("qty").value;
+  //   let type = "buyNow";
+
+  //   if (qty == "0") {
+  //     alert("Product Is Out Of Stock !!!");
+  //     return;
+  //   }
+  //   $.ajax({
+  //     url: "./Config/manageCart.php",
+  //     method: "POST",
+  //     data: "productId=" + pid + "&qty=" + qty + "&type=" + type,
+  //     success: function (res) {
+  //       // console.log(res);
+  //       if (res == 200) {
+  //         alert("Product Added Successfully");
+  //         location.reload();
+  //       } else if (res == 404) {
+  //         location.href = "./login.php";
+  //         // alert("Product Already Exists !!!");
+  //       } else if (res == 429) {
+  //         alert("Product Does Not Have That Much Stock !!!");
+  //       } else {
+  //         alert("Something Went Wrong !!!" + res);
+  //       }
+  //     },
+  //   });
+  // });
 });

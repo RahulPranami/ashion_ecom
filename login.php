@@ -3,10 +3,8 @@
 
 <?php
 require_once "./Config/config.php";
-// require_once "./Config/cart.php";
 
 $ecomm = new ECOMM();
-// $cart = new CART();
 ?>
 
 <head>

@@ -5,6 +5,9 @@
 require_once "./Config/config.php";
 
 $ecomm = new ECOMM();
+
+// if ($ecomm->checkUserLogin() == 404) header("location: ./login.php");
+
 ?>
 
 <head>

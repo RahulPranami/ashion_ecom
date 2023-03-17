@@ -1,4 +1,5 @@
 <?php $product = $ecomm->getProductDetails($_GET['pid']); ?>
+<?php $ecomm->setProductViews($_GET['pid']); ?>
 
 <!-- Product Details Section Begin -->
 <section class="product-details spad">
@@ -32,17 +33,16 @@
                 <div class="product__details__text">
                     <h3><?= $product['name'] ?> <span>Category :- <?= $ecomm->getCategoryName($product['categoryId'])['name'] ?></span></h3>
                     <div class="rating">
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <span>( 138 reviews )</span>
+                        <?php for ($i = 0; $i < 5; $i++) : ?>
+                            <i class="fa <?= $ecomm->getRating($product['id']) > $i ? "fa-star" : "fa-star-o" ?>"></i>
+                        <?php endfor ?>
+
+                        <!-- <i class="fa fa-star"></i> -->
+                        <!-- <span>( 138 reviews )</span> -->
+                        <span>( <?= $product['views'] ?> views )</span>
                     </div>
                     <div class="product__details__price">$ <?= $product['price'] ?></div>
                     <p>Description :- <?= $product['description'] ?></p>
-                    <!-- <p>Nemo enim ipsam voluptatem quia aspernatur aut odit aut loret fugit, sed quia consequuntur
-                        magni lores eos qui ratione voluptatem sequi nesciunt.</p> -->
                     <div class="product__details__button">
                         <div class="quantity">
                             <span>Quantity:</span>

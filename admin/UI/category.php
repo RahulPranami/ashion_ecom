@@ -23,6 +23,7 @@
                             <tr class="table-primary">
                                 <th scope="col">No.</th>
                                 <th scope="col">Category Name</th>
+                                <th scope="col">Product Count</th>
                                 <th scope="col">Action</th>
                                 <th scope="col">Action</th>
                             </tr>
@@ -32,6 +33,7 @@
                                 <tr>
                                     <td><?= $row['id'] ?></td>
                                     <td><?= $row['name'] ?></td>
+                                    <td><?= $row['prCount'] ?></td>
                                     <td><a href="./editCategory.php?id=<?= $row['id']; ?>"> <button class="btn btn-sm btn-outline-success">Edit</button> </a> </td>
                                     <!-- <td><button name="btnDel" class="btn btn-sm btn-outline-danger" onclick="deleteData('<?= $row['id'] ?>')">Delete</button></td> -->
                                     <td><button class="btn btn-sm btn-outline-danger delete-cat-btn" id="<?= $row['id'] ?>">Delete</button></td>

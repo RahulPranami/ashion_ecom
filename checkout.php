@@ -3,14 +3,12 @@
 
 <?php
 include_once "./Config/config.php";
-// include_once "./Config/cart.php";
 
 $ecomm = new ECOMM();
-// $cart = new CART();
-if (!$_SESSION["email"]) {
-    header('location: ./login.php');
-    return false;
-}
+
+
+// print_r($_SESSION);
+// if ($ecomm->checkUserLogin() == 404) header("location: ./login.php");
 ?>
 
 <head>
@@ -34,7 +32,21 @@ if (!$_SESSION["email"]) {
 
 
     <?php include_once "./UI/Checkout/breadcrumb.php"; ?>
-    <?php include_once "./UI/Checkout/Checkout_section.php"; ?>
+    <?php // include_once "./UI/Checkout/Checkout_section.php"; 
+    ?>
+    <?php
+    // if (isset($_SESSION['cart'])) :
+    //     include_once "./UI/Checkout/buyNow.php";
+    // else :
+    //     include_once "./UI/Checkout/Checkout_section.php";
+    // endif;
+    if (isset($_GET['buyNow'])) {
+        include_once "./UI/Checkout/buyNow.php";
+    } else {
+        // echo "not found";
+        include_once "./UI/Checkout/Checkout_section.php";
+    }
+    ?>
 
     <?php include_once "./UI/instagram.php"; ?>
     <?php include_once "./UI/footer.php"; ?>

@@ -132,8 +132,11 @@ class ECOMM
             // echo "Please <a href=g_login.php>login</a> to use this page ";
             echo "<span> Welcome <strong> $_SESSION[email] </strong> </span>";
             // echo '<br/>';
+            // echo "<a href='./user.php' class='signout'>";
+            // echo '<i class="fa fa-fw fa-user" aria-hidden="true"></i>';
+            // echo "</a>";
             echo "<a href='./logout.php' class='signout'>";
-            echo "<i class='fa fa-sign-out' aria-hidden='true'></i>";
+            echo "<i class='fa fa-fw fa-sign-out' aria-hidden='true'></i>";
             echo "</a>";
         } else {
             echo '<a href="./login.php" class="px-1">Login</a>';
@@ -197,7 +200,11 @@ class ECOMM
 
     public function getCategories()
     {
-        $query = "SELECT * FROM category";
+        // $query = "SELECT * FROM category";
+
+        $query = "SELECT category.id , category.name, COUNT(product.categoryId) AS prCount  FROM `category` LEFT JOIN product ON product.categoryId=category.id GROUP BY category.id;";
+        // $query = "select c.*, count(p.categoryId) as total_products from category c left join product p on p.categoryId = c.id group by c.id;";
+
         return $this->conn->query($query);
     }
 
@@ -279,6 +286,26 @@ class ECOMM
         return $this->conn->query($query)->fetch_assoc();
     }
 
+    public function setProductViews($pid)
+    {
+        $query = "UPDATE `product` SET `views`=`views` + 1 WHERE `id`=$pid";
+        return $this->conn->query($query);
+    }
+
+    public function getRating($pid)
+    {
+        // $query = "SELECT round( AVG(views)* 5 ) as rating  FROM `product`;";
+        // $query = "SELECT views*100 /(SELECT SUM(views) as v from product) from product;";
+
+        // for getting into a 5 floating point number
+        // $query = "SELECT views*5 / (SELECT SUM(views) as v from product) from product;";
+
+        // for getting into a 5 real number 
+        $query = "SELECT ROUND(views*5/(SELECT SUM(views) AS v FROM product)) AS star FROM product WHERE `id`='$pid';";
+
+        return $this->conn->query($query)->fetch_assoc()['star'] ?? $this->conn->error;
+    }
+
     public function getCategoryName($id)
     {
         $fetch = "SELECT `name` FROM `category` WHERE `id`=$id";
@@ -307,6 +334,7 @@ class ECOMM
     public function getCart()
     {
         $this->checkUserLogin();
+
         $userId = $this->getUser()['id'];
         $query = "SELECT * FROM `cart` WHERE userId=$userId";
 
@@ -325,7 +353,9 @@ class ECOMM
     {
         $product = $this->getProductDetails($pid);
 
-        $this->checkUserLogin();
+        // $this->checkUserLogin();
+        // if ($this->checkUserLogin() == 404) 404;
+        // return header("location: ../login.php");
 
         $userId = $this->getUser()['id'];
 
@@ -352,7 +382,7 @@ class ECOMM
 
     public function updateProductFromCart($pid, $qty)
     {
-        $this->checkUserLogin();
+        // $this->checkUserLogin();
 
         $product = $this->getProductDetails($pid);
         // $query = "SELECT * FROM `cart` WHERE userId=$userId ";
@@ -420,7 +450,7 @@ class ECOMM
         }
     }
 
-    public function placeOrder($userId, $fname, $lname, $address, $zip, $phone, $email, $total, $paymentMethod)
+    public function placeOrder($userId, $fname, $lname, $address, $zip, $phone, $email, $total, $paymentMethod, $type = '')
     {
         $query = "INSERT INTO `orders`(`userId`, `FirstName`, `LastName`, `Address`, `Postcode`, `Phone`, `Email`, `total`,`paymentMethod`) VALUES ('$userId','$fname','$lname','$address','$zip','$phone','$email','$total','$paymentMethod')";
 
@@ -428,29 +458,52 @@ class ECOMM
 
             $lastID = $this->conn->insert_id;
 
-            $cart = $this->getCart();
+            if ($type == "buyNow") {
+                $pid = $_SESSION['cart']['pid'];
 
-            while ($cartItem = $cart->fetch_assoc()) :
-                $price = $cartItem['product_price'];
-                // $uid = $cartItem['userId'];
-                $pid = $cartItem['product_id'];
-                // $pname = $cartItem['product_name'];
-                $pqty = $cartItem['qty'];
-                $ptotal = $cartItem['subTotal'];
+                $product = $this->getProductDetails($pid);
 
-                // $query .= "('$lastID','$pid','$pqty','$price','$ptotal')";
-                $query = "INSERT INTO `order_details`(`order_id`, `product_id`, `product_qty`, `product_price`, `subTotal`) VALUES ('$lastID','$pid','$pqty','$price','$ptotal')";
+                $price = $product['price'];
+                // $total = $product['price'];
+                $qty = 1;
+
+                $query = "INSERT INTO `order_details`(`order_id`, `product_id`, `product_qty`, `product_price`, `subTotal`) VALUES ('$lastID','$pid',$qty,'$price','$price')";
+                // return 101;
 
                 if ($this->conn->query($query)) {
-                    $this->updateStock($pid, $pqty);
+                    $this->updateStock($pid, $qty);
                 } else {
                     return $this->conn->error;
                 }
-            endwhile;
 
-            $this->emptyProductFromCart();
+                // $this->emptyProductFromCart();
+                return 201;
+            } else {
+
+                $cart = $this->getCart();
+
+                while ($cartItem = $cart->fetch_assoc()) :
+                    $price = $cartItem['product_price'];
+                    // $uid = $cartItem['userId'];
+                    $pid = $cartItem['product_id'];
+                    // $pname = $cartItem['product_name'];
+                    $pqty = $cartItem['qty'];
+                    $ptotal = $cartItem['subTotal'];
+
+                    // $query .= "('$lastID','$pid','$pqty','$price','$ptotal')";
+                    $query = "INSERT INTO `order_details`(`order_id`, `product_id`, `product_qty`, `product_price`, `subTotal`) VALUES ('$lastID','$pid','$pqty','$price','$ptotal')";
+
+                    if ($this->conn->query($query)) {
+                        $this->updateStock($pid, $pqty);
+                    } else {
+                        return $this->conn->error;
+                    }
+                endwhile;
+
+                $this->emptyProductFromCart();
+                return 201;
+            }
             // return;
-            return 201;
         } else {
             return $this->conn->error;
         }
@@ -463,7 +516,8 @@ class ECOMM
 
         $newStock = $cStock - $qty;
 
-        $query = "UPDATE `product` SET `quantity`='$newStock' WHERE `id`=$pid";
+        // $query = "UPDATE `product` SET `quantity`='$newStock' WHERE `id`=$pid";
+        $query = "UPDATE `product` SET `quantity`=`quantity` - $qty WHERE `id`=$pid";
 
         if ($this->conn->query($query)) {
         } else {
@@ -496,7 +550,34 @@ class ECOMM
         return $this->conn->query($query) ?? $this->conn->error;
     }
 
-    // public function buyNow($pid, $qty)
-    // {
-    // }
+    public function buyNow($pid, $qty)
+    {
+        $product = $this->getProductDetails($pid);
+
+        $_SESSION['cart'][$pid]['qty'] = $qty;
+
+        // $this->checkUserLogin();
+
+        // $userId = $this->getUser()['id'];
+
+        // // return $product['quantity'];
+        // if ($qty > $product['quantity']) {
+        //     return 429;
+        // }
+
+        $productId = $product['id'];
+        $productName = $product['name'];
+        $productPrice = $product['price'];
+        $productImage = $product['image'];
+
+        $subtotal = $productPrice * $qty;
+
+        // // $query =  "INSERT INTO `cart`(`userId`, `product_id`, `product_price`,`qty`,`product_name`,`product_image`, `subTotal`) VALUES ('$userId','$productId','$productPrice','$qty','$productName','$productImage','$subtotal')";
+
+        // if ($this->conn->query($query)) {
+        //     return 200;
+        // } else {
+        //     return $this->conn->errno;
+        // }
+    }
 }

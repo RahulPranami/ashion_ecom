@@ -175,56 +175,62 @@ $(document).ready(() => {
   });
 
   $(".delete-btn").on("click", function (e) {
-    $.ajax({
-      url: "../Config/delete.php",
-      method: "POST",
-      data: "product&id=" + this.id + "&tbl=" + "product",
-      success: function (res) {
-        console.log(res);
-        if (res == 200) {
-          alert("Product Deleted Successfully!!");
-          location.reload();
-        } else if (res == 1451) {
-          alert("There are previous orders depending on it!!");
-        } else {
-          alert(res);
-        }
-      },
-    });
+    if (confirm("Are You Sure You Want to delete this ??? ")) {
+      $.ajax({
+        url: "../Config/delete.php",
+        method: "POST",
+        data: "product&id=" + this.id + "&tbl=" + "product",
+        success: function (res) {
+          console.log(res);
+          if (res == 200) {
+            alert("Product Deleted Successfully!!");
+            location.reload();
+          } else if (res == 1451) {
+            alert("There are previous orders depending on it!!");
+          } else {
+            alert(res);
+          }
+        },
+      });
+    }
   });
 
   $(".delete-order-btn").on("click", function (e) {
-    $.ajax({
-      url: "../Config/delete.php",
-      method: "POST",
-      data: "order&id=" + this.id + "&tbl=" + "orders",
-      success: function (res) {
-        console.log(res);
-        if (res == 200) {
-          alert("Order Deleted Successfully!!");
-          location.reload();
-        } else {
-          alert(res);
-        }
-      },
-    });
+    if (confirm("Are You Sure You Want to delete this Order ??? ")) {
+      $.ajax({
+        url: "../Config/delete.php",
+        method: "POST",
+        data: "order&id=" + this.id + "&tbl=" + "orders",
+        success: function (res) {
+          console.log(res);
+          if (res == 200) {
+            alert("Order Deleted Successfully!!");
+            location.reload();
+          } else {
+            alert(res);
+          }
+        },
+      });
+    }
   });
 
   $(".delete-user-btn").on("click", function (e) {
-    $.ajax({
-      url: "../Config/delete.php",
-      method: "POST",
-      data: "user&id=" + this.id + "&tbl=" + "user",
-      success: function (res) {
-        console.log(res);
-        if (res == 200) {
-          alert("User Deleted Successfully!!");
-          location.reload();
-        } else {
-          alert(res);
-        }
-      },
-    });
+    if (confirm("Are You Sure You Want to delete this user ??? ")) {
+      $.ajax({
+        url: "../Config/delete.php",
+        method: "POST",
+        data: "user&id=" + this.id + "&tbl=" + "user",
+        success: function (res) {
+          console.log(res);
+          if (res == 200) {
+            alert("User Deleted Successfully!!");
+            location.reload();
+          } else {
+            alert(res);
+          }
+        },
+      });
+    }
   });
 
   $(".delete-cat-btn").on("click", function (e) {

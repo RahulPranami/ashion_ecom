@@ -5,7 +5,8 @@ include_once "./Config/config.php";
 // include_once "./Config/cart.php";
 
 $ecomm = new ECOMM();
-// $cart = new CART();
+
+// if ($ecomm->checkUserLogin() == 404) header("location: ./login.php");
 
 ?>
 
